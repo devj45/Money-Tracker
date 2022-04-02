@@ -17,11 +17,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kt.monytracker.adapter.LogAdapter
 import com.kt.monytracker.db.MoneyTrackerDB
 import com.kt.monytracker.db.MoneyTrackerRepo
+import com.kt.monytracker.helper.SharePref
+import com.kt.monytracker.helper.get
+import com.kt.monytracker.helper.put
 import com.kt.monytracker.model.LogType
 import com.kt.monytracker.model.TaskLog
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 import kotlin.math.log
+import kotlin.time.measureTimedValue
 
 //kết thừa coroutine
 class MainActivity : AppCompatActivity(), CoroutineScope {
@@ -44,6 +48,8 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     lateinit var loading: ProgressBar
     lateinit var container: LinearLayout
     lateinit var tvStatus: TextView
+    lateinit var tvAddMoney: TextView
+    lateinit var tvSubtractMoney: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +59,8 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         loading = findViewById(R.id.loading)
         container = findViewById(R.id.trackMoneyContainer)
         tvStatus = findViewById(R.id.tvStatus)
+        tvAddMoney = findViewById(R.id.tvAddMoney)
+        tvSubtractMoney = findViewById(R.id.tvSubtractMoney)
 
         //Tên actionbar
         title = "Money Tracker"
@@ -64,13 +72,36 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         ContextCompat.getDrawable(this,R.drawable.bg_divider)
 
         //LogAdapter recyclerview
-        var logadapter = LogAdapter(moneyTrackerRepo = moneyTrackerRepo)
+        logAdapter = LogAdapter(moneyTrackerRepo = moneyTrackerRepo,
+        onDeleteItem = {
+            //update lại khi delete
+            if (it.type == LogType.ADD){
+                val currentMoney = SharePref.create(this)?.get("MONEY_ADD", 0) as Int
+                //cộng tiền lại
+                SharePref.create(this)?.put("MOENY_ADD",currentMoney - it.money)
+            }else{
+                val currentMoney = SharePref.create(this)?.get("MONEY_SUBTRACT", 0) as Int
+                //cộng tiền lại
+                SharePref.create(this)?.put("MONEY_SUBTRACT",currentMoney - it.money)
+            }
+
+            //nếu xóa hết thì nó mất và trả về empty
+            if (recyclerview.adapter?.itemCount == 0){
+                showEmptyTask()
+            }else{
+                //update lại giá trị
+                showTrackMoney()
+            }
+        },
+        onUpdateItem = {
+
+        })
         //
 
         recyclerview.apply {
             layoutManager = linearLayoutManager
             addItemDecoration(decoration)
-            adapter = logadapter
+            adapter = logAdapter
         }
 
         loadTasks(true)
@@ -85,6 +116,9 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     }
 
     private fun loadTasks(enableDelay: Boolean){
+        //
+        showTrackMoney()
+
         launch {
             if (enableDelay){
                 //delay 2s để nó thực hiện load
@@ -99,11 +133,20 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
                 if (listTasks.isEmpty()){
                     showEmptyTask()
                 }else{
-                    Log.d("DL",listTasks.toString())
                     displayTasks(listTasks)
                 }
             }
         }
+    }
+
+    //hiển thị tiền âm, tiền dương
+    private fun showTrackMoney(){
+        val addMoney = SharePref.create(this)?.get("MONEY_ADD", 0)
+        val subtractMoney = SharePref.create(this)?.get("MONEY_SUBTRACT", 0)
+
+        Log.d("TienNe","$addMoney + $subtractMoney")
+        tvAddMoney.text = addMoney.toString()
+        tvSubtractMoney.text = subtractMoney.toString()
     }
 
     //show nếu nó không có dữ liệu

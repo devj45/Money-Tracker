@@ -6,6 +6,9 @@ import android.view.MenuItem
 import android.widget.Button
 import com.kt.monytracker.db.MoneyTrackerDB
 import com.kt.monytracker.db.MoneyTrackerRepo
+import com.kt.monytracker.helper.SharePref
+import com.kt.monytracker.helper.get
+import com.kt.monytracker.helper.put
 import com.kt.monytracker.model.LogType
 import com.kt.monytracker.model.TaskLog
 import io.ghyeok.stickyswitch.widget.StickySwitch
@@ -71,11 +74,28 @@ class AddTaskLogActivity : AppCompatActivity(), CoroutineScope {
                     )
                 )
 
+                //
+                calculateTrackingMoney(logType, money.toInt())
+
                 finish()
                 setResult(1)
             }
         }
 
+    }
+
+    //caching
+    private fun calculateTrackingMoney(logtype: LogType, money: Int){
+        if (logtype == LogType.ADD){
+            val currentMoney = SharePref.create(this)?.get("MONEY_ADD", 0) as Int
+            //cộng tiền lại
+            SharePref.create(this)?.put("MOENY_ADD",currentMoney + money)
+        }
+        else{
+            val currentMoney = SharePref.create(this)?.get("MONEY_SUBTRACT", 0) as Int
+            //cộng tiền lại
+            SharePref.create(this)?.put("MONEY_SUBTRACT",currentMoney + money)
+        }
     }
 
 

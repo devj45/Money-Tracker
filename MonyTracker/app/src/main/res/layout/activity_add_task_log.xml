@@ -45,7 +45,7 @@
     <io.ghyeok.stickyswitch.widget.StickySwitch
         android:id="@+id/sticky_switch"
         android:layout_marginTop="25dp"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/size_150dp"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         app:ss_animationDuration="300"
