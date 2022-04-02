@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="15dp"
+    tools:context=".AddTaskLogActivity">
+
+    <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
+        android:id="@+id/textFieldBoxesTaskName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:labelText="Task Name"
+        app:endIcon="@drawable/ic_baseline_edit_24"
+        >
+
+        <studio.carbonylgroup.textfieldboxes.ExtendedEditText
+            android:id="@+id/extendedEditTaskName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+    </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
+
+    <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
+        android:id="@+id/textFieldBoxesMoney"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:labelText="Money"
+        app:endIcon="@drawable/ic_baseline_attach_money_24"
+        >
+
+        <studio.carbonylgroup.textfieldboxes.ExtendedEditText
+            android:id="@+id/extendedEditMoney"
+            android:inputType="number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+    </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
+
+    <io.ghyeok.stickyswitch.widget.StickySwitch
+        android:id="@+id/sticky_switch"
+        android:layout_marginTop="25dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        app:ss_animationDuration="300"
+        app:ss_iconPadding="18dp"
+        app:ss_iconSize="22dp"
+        app:ss_leftIcon="@drawable/ic_round_add_24"
+        app:ss_leftText="ADD"
+        app:ss_rightIcon="@drawable/ic_baseline_remove_24"
+        app:ss_rightText="SUBTRACT"
+        app:ss_selectedTextSize="14sp"
+        app:ss_sliderBackgroundColor="#005431"
+        app:ss_switchColor="#8cc63f"
+        app:ss_textColor="#005431"
+        app:ss_textSize="12sp"
+        app:ss_animationType="line"/>
+
+    <Button
+        android:id="@+id/btnAddTask"
+        android:text="Add Task"
+        android:textColor="@color/white"
+        android:background="@drawable/bg_btn_add_task"
+        android:layout_marginTop="25dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </Button>
+</LinearLayout>

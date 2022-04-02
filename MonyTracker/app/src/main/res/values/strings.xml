@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MonyTracker</string>
+
+    <string name="default_text">0</string>
+</resources>
